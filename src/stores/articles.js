@@ -4,7 +4,9 @@ import { defineStore } from "pinia";
 import { useRouter } from "vue-router";
 
 export const useArticleStore = defineStore( "article", () => {
-  // 초기 토큰 값
+  const API_URL = 'http://127.0.0.1:8000'
+  const articles = ref([])
+  const exchanges = ref([])
   const token = ref(null);
   const router = useRouter();
 
@@ -67,7 +69,51 @@ export const useArticleStore = defineStore( "article", () => {
     console.log('로그아웃 성공')
   }
 
-  return { signup, login, logout, isLogin, token }
+  // 환율 계산 함수
+  const getExchanges = function () {
+    axios({
+      method: 'get',
+      url: `${API_URL}/exchange/`
+    })
+      .then(res => {
+        console.log(res.data)
+        exchanges.value = res.data
+      })
+      .catch(err => console.log(err))
+    
+  }
+
+  // 게시글 출력 함수
+  const getArticles = function () {
+    axios({
+      method: 'get',
+      url: "http://127.0.0.1:8000/community/articles/",
+      headers: {
+        Authorization: `Token ${token.value}`
+      }
+    })
+      .then(response => {
+        articles.value = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  // 금리 비교 함수
+  const getDeposit = function () {
+    axios({
+      method : 'get',
+      url : `${API_URL}/deposit_list`
+    })
+      .then(res => {
+        console.log(res.data)
+        Deposit.value = res.data
+      })
+      .catch(err => console.log(err))
+  }
+
+  return { API_URL, token, exchanges, articles, signup, login, logout, isLogin, getExchanges, getArticles, getDeposit}
 },
 
 {persist : true})

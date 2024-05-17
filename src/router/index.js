@@ -9,6 +9,8 @@ import SavingView from '@/views/SavingView.vue'
 import ExchangeView from '@/views/ExchangeView.vue'
 import BankView from '@/views/BankView.vue'
 import CommunityView from '@/views/CommunityView.vue'
+import ArticleDetailView from '@/views/ArticleDetailView.vue'
+import ArticleCreateView from '@/views/ArticleCreateView.vue'
 
 
 const router = createRouter({
@@ -73,6 +75,17 @@ const router = createRouter({
       path : '/community',
       name : 'community',
       component : CommunityView,
+    },
+    // 커뮤니티 게시판 라우터
+    {
+      path: '/community/articles/:id',
+      name: 'articleDetail',
+      component: ArticleDetailView
+    },
+    {
+      path: '/community/create',
+      name: 'articleCreate',
+      component: ArticleCreateView
     },
   ]
 })
