@@ -69,20 +69,6 @@ export const useArticleStore = defineStore( "article", () => {
     console.log('로그아웃 성공')
   }
 
-  // 환율 계산 함수
-  const getExchanges = function () {
-    axios({
-      method: 'get',
-      url: `${API_URL}/exchange/`
-    })
-      .then(res => {
-        console.log(res.data)
-        exchanges.value = res.data
-      })
-      .catch(err => console.log(err))
-    
-  }
-
   // 게시글 출력 함수
   const getArticles = function () {
     axios({
@@ -101,19 +87,19 @@ export const useArticleStore = defineStore( "article", () => {
   }
 
   // 금리 비교 함수
-  const getDeposit = function () {
-    axios({
-      method : 'get',
-      url : `${API_URL}/deposit_list`
-    })
-      .then(res => {
-        console.log(res.data)
-        Deposit.value = res.data
-      })
-      .catch(err => console.log(err))
-  }
+  // const getDeposit = function () {
+  //   axios({
+  //     method : 'get',
+  //     url : `${API_URL}/deposit_list`
+  //   })
+  //     .then(res => {
+  //       console.log(res.data)
+  //       Deposit.value = res.data
+  //     })
+  //     .catch(err => console.log(err))
+  // }
 
-  return { API_URL, token, exchanges, articles, signup, login, logout, isLogin, getExchanges, getArticles, getDeposit}
+  return { API_URL, token, exchanges, articles, signup, login, logout, isLogin, getArticles,}
 },
 
 {persist : true})
