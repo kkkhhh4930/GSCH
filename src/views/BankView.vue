@@ -1,55 +1,53 @@
 <template>
-  <div>
-    <div id="map" style="width: 500px; height: 400px"></div>
-    <div>
+  <div class="container mt-4">
+    <div id="map" class="mb-4" style="width: 100%; height: 400px"></div>
+    
+    <div class="form-row mb-4 align-items-end">
       <!-- 도시 선택 -->
-      <select v-model="selectedCity">
-        <option value="">도시 선택</option>
-        <option
-          v-for="city in cities"
-          :key="city.value"
-          :value="city.value"
-        >
-          {{ city.name }}
-        </option>
-      </select>
+      <div class="form-group col-md-3">
+        <label for="city"></label>
+        <select id="city" v-model="selectedCity" class="form-control">
+          <option value="">도시 선택</option>
+          <option v-for="city in cities" :key="city.value" :value="city.value">
+            {{ city.name }}
+          </option>
+        </select>
+      </div>
 
       <!-- 구 선택 -->
-      <select v-model="selectedDistrict">
-        <option value="">구 선택</option>
-        <option
-          v-for="district in currentDistrictOptions"
-          :key="district"
-          :value="district"
-        >
-          {{ district }}
-        </option>
-      </select>
+      <div class="form-group col-md-3">
+        <label for="district"></label>
+        <select id="district" v-model="selectedDistrict" class="form-control">
+          <option value="">구 선택</option>
+          <option v-for="district in currentDistrictOptions" :key="district" :value="district">
+            {{ district }}
+          </option>
+        </select>
+      </div>
 
       <!-- 은행 선택 -->
-      <select v-model="selectedBank">
-        <option disabled value="">은행 선택</option>
-        <option 
-          v-for="bank in banks" 
-          :key="bank.value" 
-          :value="bank.value"
-        >
-          {{ bank.name }}
-        </option>
-      </select>
+      <div class="form-group col-md-3">
+        <label for="bank"></label>
+        <select id="bank" v-model="selectedBank" class="form-control">
+          <option disabled value="">은행 선택</option>
+          <option v-for="bank in banks" :key="bank.value" :value="bank.value">
+            {{ bank.name }}
+          </option>
+        </select>
+      </div>
 
-      <button @click="searchBank">찾기</button>
+      <div class="form-group col-md-3">
+        <button @click="searchBank" class="btn btn-primary w-100">찾기</button>
+      </div>
     </div>
 
     <!-- 결과 출력 -->
-    <div>
-    <ul>
-      <li v-for="(place, index) in places" :key="index" @click="moveToPlace(place)">
+    <ul class="list-group">
+      <li v-for="(place, index) in places" :key="index" class="list-group-item list-group-item-action" @click="moveToPlace(place)">
         {{ place.place_name }} - {{ place.address_name }}
       </li>
     </ul>
-    </div>
-</div>
+  </div>
 </template>
 
 <script setup>
@@ -61,6 +59,7 @@ const selectedBank = ref("");
 const places = ref([]);
 let map;
 let markers = [];
+let infowindows = []; // Infowindow array
 
 // 도시 목록
 const cities = ref([
@@ -71,7 +70,6 @@ const cities = ref([
   { name: '광주광역시', value: '광주광역시' },
   { name: '대전광역시', value: '대전광역시' },
   { name: '울산광역시', value: '울산광역시' },
-  { name: '현후특별시', value: '현후특별시' },
   { name: '경기도', value: '경기도' },
   { name: '강원도', value: '강원도' },
   { name: '충청북도', value: '충청북도' },
@@ -199,7 +197,7 @@ function createMarker(place) {
   // 마커 배열에 생성된 마커 추가
   markers.push(marker);
 
-      // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우 생성
+  // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우 생성
   var iwContent = `<div style="padding:10px; min-width:200px; max-width:300px; white-space:pre-wrap;">${place.place_name}</div>`,
       iwRemoveable = true; // 인포윈도우를 닫을 수 있는 X 버튼
 
@@ -211,15 +209,27 @@ function createMarker(place) {
   
   // 마커에 클릭 이벤트를 추가
   kakao.maps.event.addListener(marker, "click", function () {
-    // 마커를 클릭하면 장소명이 인포윈도우 표출
-    infowindow.open(map, marker);
+    // 마커를 클릭하면 기존의 모든 인포윈도우를 닫음
+    infowindows.forEach((iw) => iw.close());
+    // 현재 인포윈도우가 열려있는지 확인
+    if (infowindow.getMap()) {
+      infowindow.close();
+    } else {
+      infowindow.open(map, marker);
+    }
   });
+
+  // 인포윈도우 배열에 생성된 인포윈도우 추가
+  infowindows.push(infowindow);
 }
 
 // 지도에 표시된 모든 마커를 제거하는 함수
 function clearMarkers() {
   markers.forEach((marker) => marker.setMap(null));
   markers = []; // 마커 배열 초기화
+  // 인포윈도우 배열 초기화
+  infowindows.forEach((iw) => iw.close());
+  infowindows = [];
 }
 
 // 선택한 장소로 지도 이동 함수
@@ -237,4 +247,14 @@ const infowindow = new kakao.maps.InfoWindow({
 infowindow.open(map);
 };
 
-</script>
+<style scoped>
+#map {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.list-group-item {
+  cursor: pointer;
+}
+</style>
