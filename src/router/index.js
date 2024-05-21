@@ -11,6 +11,7 @@ import BankView from '@/views/BankView.vue'
 import CommunityView from '@/views/CommunityView.vue'
 import ArticleDetailView from '@/views/ArticleDetailView.vue'
 import ArticleCreateView from '@/views/ArticleCreateView.vue'
+import ProfileView from '@/views/ProfileView.vue' // 프로필 뷰를 가져옵니다.
 
 
 const router = createRouter({
@@ -86,6 +87,12 @@ const router = createRouter({
       path: '/community/create',
       name: 'articleCreate',
       component: ArticleCreateView
+    },
+    // 프로필 라우터
+    {
+      path: "/profile",
+      name: "profile",
+      component: ProfileView,
     },
   ]
 })

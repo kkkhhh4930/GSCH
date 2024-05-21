@@ -1,6 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import { useArticleStore } from "@/stores/articles";
+const store = useArticleStore()
+const isLogin = computed(() => store.isLogin)
 
 </script>
 
@@ -17,7 +20,8 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink :to="{ name: 'signup' }">회원가입</RouterLink> |
         <RouterLink :to="{ name: 'login' }">로그인</RouterLink> |
         <RouterLink :to="{ name: 'logout' }">로그아웃</RouterLink> |
-        
+        <RouterLink v-if="isLogin" :to="{ name: 'profile' }">프로필</RouterLink>
+
     </div>
 </template>
 

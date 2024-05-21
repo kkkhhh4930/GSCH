@@ -9,6 +9,7 @@ export const useArticleStore = defineStore( "article", () => {
   const exchanges = ref([])
   const token = ref(null);
   const router = useRouter();
+  const userInfo = ref();
 
   const isLogin = computed(() => {
     if (token.value === null) {
@@ -85,6 +86,59 @@ export const useArticleStore = defineStore( "article", () => {
         console.log(error)
       })
   }
+  const getUserInfo = function (username) {
+    axios({
+      method: 'get',
+      url: `${API_URL}/accounts/${username}/profile/`,
+      headers: {
+        Authorization: `Token ${token.value}`
+      }
+    })
+      .then(res => {
+        userInfo.value = res.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  
+  const changePassword = function (data) {
+    axios({
+      method: 'post',
+      url: `${API_URL}/accounts/change-password/`,
+      headers: {
+        Authorization: `Token ${token.value}`
+      },
+      data: data
+    })
+      .then(res => {
+        console.log('비밀번호 변경 성공');
+      })
+      .catch(error => {
+        console.log('비밀번호 변경 실패');
+        console.log(error);
+      });
+  };
+  
+  const updateUserInfo = function (data) {
+    axios({
+      method: 'put',
+      url: `${API_URL}/accounts/${data.username}/profile/`,
+      headers: {
+        Authorization: `Token ${token.value}`
+      },
+      data: data
+    })
+      .then(res => {
+        console.log('회원 정보 수정 성공');
+        userInfo.value = res.data;
+      })
+      .catch(error => {
+        console.log('회원 정보 수정 실패');
+        console.log(error);
+      });
+  };
+  
 
   // 금리 비교 함수
   // const getDeposit = function () {
@@ -99,7 +153,6 @@ export const useArticleStore = defineStore( "article", () => {
   //     .catch(err => console.log(err))
   // }
 
-  return { API_URL, token, exchanges, articles, signup, login, logout, isLogin, getArticles,}
-},
+  return { API_URL, token, articles, userInfo, signup, login, logout, isLogin, getArticles, getUserInfo, changePassword, updateUserInfo };
+});
 
-{persist : true})
