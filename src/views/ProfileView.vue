@@ -6,19 +6,12 @@ const articleStore = useArticleStore();
 const activeTab = ref('profile');
 const showPasswordChange = ref(false);
 
-<<<<<<< HEAD
-const userInfo = computed(() => {
-  console.log(articleStore.userInfo)
-  return articleStore.userInfo}
-  );
-=======
 const userInfo = computed(() => articleStore.userInfo);
->>>>>>> acc074bcafa4f2aa6dfce17df0a9caae8980a41d
 const oldPassword = ref('');
 const newPassword = ref('');
 
 onMounted(() => {
-  const username = articleStore.userInfo?.username;
+  const username = articleStore.userInfzo?.username;
   if (username) {
     articleStore.getUserInfo(username);
   }
@@ -34,11 +27,18 @@ const changePassword = () => {
 };
 
 const updateUserInfo = () => {
-  articleStore.updateUserInfo(userInfo.value);
-<<<<<<< HEAD
+  if (!userInfo.value) {
+    alert('회원 정보가 로딩되지 않았습니다.');
+    return;
+  }
 
-=======
->>>>>>> acc074bcafa4f2aa6dfce17df0a9caae8980a41d
+  const updatedInfo = {
+    username: userInfo.value.username,
+    email: userInfo.value.email,
+    name: userInfo.value.name,
+  };
+
+  articleStore.updateUserInfo(updatedInfo);
 };
 
 </script>
@@ -54,10 +54,10 @@ const updateUserInfo = () => {
     <div v-if="activeTab === 'profile'" class="tab-content">
       <div class="profile">
         <img :src="userInfo?.profile_img || 'default_profile_img.jpg'" alt="Profile Picture" />
-        <p>이름: {{ userInfo?.name }}</p>
-        <p>username: {{ userInfo?.username }}</p>
-        <p>회원번호: {{ userInfo?.id }}</p>
-        <p>Email: {{ userInfo?.email }}</p>
+        <p>이름: {{ userInfo?.name || '' }}</p>
+        <p>username: {{ userInfo?.username || '' }}</p>
+        <p>회원번호: {{ userInfo?.id || '' }}</p>
+        <p>Email: {{ userInfo?.email || '' }}</p>
         <button @click="showPasswordChange = !showPasswordChange">비밀 번호 변경</button>
         <button @click="activeTab = 'editProfile'">회원 정보 수정</button>
 
@@ -79,9 +79,9 @@ const updateUserInfo = () => {
 
     <div v-if="activeTab === 'editProfile'" class="tab-content">
       <h2>회원 정보 수정</h2>
-      <input v-model="userInfo.value.name" type="text" placeholder="이름" />
-      <input v-model="userInfo.value.username" type="text" placeholder="username" />
-      <input v-model="userInfo.value.email" type="email" placeholder="Email" />
+      <input v-model="userInfo.value.name" type="text" placeholder="이름" v-if="userInfo" />
+      <input v-model="userInfo.value.username" type="text" placeholder="username" v-if="userInfo" />
+      <input v-model="userInfo.value.email" type="email" placeholder="Email" v-if="userInfo" />
       <button @click="updateUserInfo">수정 완료</button>
     </div>
   </div>

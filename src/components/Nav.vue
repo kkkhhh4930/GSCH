@@ -21,10 +21,6 @@ const isLogin = computed(() => store.isLogin)
         <RouterLink :to="{ name: 'login' }">로그인</RouterLink> |
         <RouterLink :to="{ name: 'logout' }">로그아웃</RouterLink> |
         <RouterLink v-if="isLogin" :to="{ name: 'profile' }">프로필</RouterLink>
-<<<<<<< HEAD
-=======
-
->>>>>>> acc074bcafa4f2aa6dfce17df0a9caae8980a41d
     </div>
 </template>
 
