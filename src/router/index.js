@@ -11,6 +11,7 @@ import BankView from '@/views/BankView.vue'
 import CommunityView from '@/views/CommunityView.vue'
 import ArticleDetailView from '@/views/ArticleDetailView.vue'
 import ArticleCreateView from '@/views/ArticleCreateView.vue'
+import ProfileView from '@/views/ProfileView.vue' // 프로필 뷰를 가져옵니다.
 
 
 const router = createRouter({
@@ -87,6 +88,11 @@ const router = createRouter({
       name: 'articleCreate',
       component: ArticleCreateView
     },
+    {
+      path: "/profile",
+      name: "profile",
+      component: ProfileView,
+    },
   ]
 })
 
@@ -97,7 +103,7 @@ router.beforeEach((to, from) => {
     return { name: "home" };
   }
   if (store.token === null && to.name === "home" && from.name !== "logout") {
-    return { name: "signin" };
+    return { name: "signup" };
   }
 });
 
