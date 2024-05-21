@@ -247,14 +247,8 @@ const infowindow = new kakao.maps.InfoWindow({
 infowindow.open(map);
 };
 
-<style scoped>
-#map {
-  width: 100%;
-  height: 400px;
-  margin-bottom: 20px;
-}
+</script>
 
-.list-group-item {
-  cursor: pointer;
-}
+<style scoped>
+
 </style>
