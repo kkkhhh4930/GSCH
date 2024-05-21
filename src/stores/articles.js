@@ -9,7 +9,10 @@ export const useArticleStore = defineStore("article", () => {
   const token = ref(null);
   const router = useRouter();
   const userInfo = ref();
+<<<<<<< HEAD
   const error = ref(null);
+=======
+>>>>>>> acc074bcafa4f2aa6dfce17df0a9caae8980a41d
 
   const isLogin = computed(() => token.value !== null);
 

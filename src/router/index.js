@@ -88,6 +88,7 @@ const router = createRouter({
       name: 'articleCreate',
       component: ArticleCreateView
     },
+    // 프로필 라우터
     {
       path: "/profile",
       name: "profile",
