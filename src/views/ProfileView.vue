@@ -6,14 +6,7 @@ const articleStore = useArticleStore();
 const activeTab = ref('profile');
 const showPasswordChange = ref(false);
 
-<<<<<<< HEAD
-const userInfo = computed(() => {
-  console.log(articleStore.userInfo)
-  return articleStore.userInfo}
-  );
-=======
 const userInfo = computed(() => articleStore.userInfo);
->>>>>>> acc074bcafa4f2aa6dfce17df0a9caae8980a41d
 const oldPassword = ref('');
 const newPassword = ref('');
 
@@ -35,10 +28,6 @@ const changePassword = () => {
 
 const updateUserInfo = () => {
   articleStore.updateUserInfo(userInfo.value);
-<<<<<<< HEAD
-
-=======
->>>>>>> acc074bcafa4f2aa6dfce17df0a9caae8980a41d
 };
 
 </script>

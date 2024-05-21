@@ -1,66 +1,60 @@
 <template>
-    <div>
-      <h1>환율계산 페이지</h1>
-      <button @click="fetchExchanges">환율 조회</button>
-      <!-- 환율 데이터가 있는 경우 -->
-      <div v-if="store.exchanges.length > 0">
-        <!-- 바꿀 화폐 선택 -->
-        <select v-model="fromCurrency" @change="onSelectChange">
-          <option value="" disabled>바꿀 화폐를 선택하세요</option>
-          <!-- 사용 가능한 화폐 목록 -->
-          <option v-for="exchange in store.exchanges" :key="exchange.cur_unit" :value="exchange.cur_unit">
-            {{ exchange.cur_nm }} ({{ exchange.cur_unit }})
-          </option>
-        </select>
-        <!-- 환전 방향 전환 버튼 -->
-        <button @click="swapCurrencies">⇄</button>
-        <!-- 목표 화폐 선택 -->
-        <select v-model="toCurrency" @change="onSelectChange">
-          <option value="" disabled>목표 화폐를 선택하세요</option>
-          <!-- 사용 가능한 화폐 목록 -->
-          <option v-for="exchange in store.exchanges" :key="exchange.cur_unit" :value="exchange.cur_unit">
-            {{ exchange.cur_nm }} ({{ exchange.cur_unit }})
-          </option>
-        </select>
-      </div>
-      <!-- 환율 데이터가 없는 경우 -->
-      <div v-else>
-        <p>환율 데이터를 사용할 수 없습니다</p>
-      </div>
-      <!-- 환율 계산기 컴포넌트 -->
-      <ExchangeCalculator 
-        v-if="selectedExchangeRate !== null" 
-        :fromCurrency="fromCurrency" 
-        :toCurrency="toCurrency" 
-        :exchangeRate="selectedExchangeRate" 
-        @close="resetSelection"
-      />
+  <div>
+    <h1>환율 계산기 페이지</h1>
+    <button @click="fetchExchanges">환율 조회</button>
+    <!-- 환율 데이터가 있는 경우 -->
+    <div v-if="store.exchanges.length > 0">
+      <!-- 바꿀 화폐 선택 -->
+      <select v-model="fromCurrency" @change="onSelectChange">
+        <option value="" disabled>바꿀 화폐를 선택하세요</option>
+        <!-- 사용 가능한 화폐 목록 -->
+        <option v-for="exchange in store.exchanges" :key="exchange.cur_unit" :value="exchange.cur_unit">
+          {{ exchange.cur_nm }} ({{ exchange.cur_unit }})
+        </option>
+      </select>
+      <!-- 환전 방향 전환 버튼 -->
+      <button @click="swapCurrencies">⇄</button>
+      <!-- 목표 화폐 선택 -->
+      <select v-model="toCurrency" @change="onSelectChange">
+        <option value="" disabled>목표 화폐를 선택하세요</option>
+        <!-- 사용 가능한 화폐 목록 -->
+        <option v-for="exchange in store.exchanges" :key="exchange.cur_unit" :value="exchange.cur_unit">
+          {{ exchange.cur_nm }} ({{ exchange.cur_unit }})
+        </option>
+      </select>
     </div>
+    <!-- 환율 데이터가 없는 경우 -->
+    <div v-else>
+      <p>환율 데이터를 사용할 수 없습니다</p>
+    </div>
+    <!-- 환율 계산기 컴포넌트 -->
+    <ExchangeCalculator 
+      v-if="selectedExchangeRate !== null" 
+      :fromCurrency="fromCurrency" 
+      :toCurrency="toCurrency" 
+      :exchangeRate="selectedExchangeRate" 
+      @close="resetSelection"
+    />
+  </div>
 </template>
   
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useArticleStore } from "@/stores/articles";
-import axios from 'axios'
 import ExchangeCalculator from "@/components/ExchangeCalculator.vue"; // Exchange Calculator component
 
 const store = useArticleStore();
-const exchanges = ref([])
 const fromCurrency = ref('');
 const toCurrency = ref('');
 const selectedExchangeRate = ref(null);
 
-onMounted(() => {
-  axios({
-    method: 'get',
-    url: `${store.API_URL}/exchange/`
-  })
-    .then(res => {
-      exchanges.value = res.data
-    })
-    .catch(err => console.log(err))
-})
+const fetchExchanges = () => {
+  store.getExchanges();
+};
 
+onMounted(() => {
+  fetchExchanges();
+});
 
 // 화폐 선택 및 환율 초기화
 const resetSelection = () => {
@@ -120,4 +114,3 @@ const swapCurrencies = () => {
 <style scoped>
 /* 스타일 지정 */
 </style>
-  
