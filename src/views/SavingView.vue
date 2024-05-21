@@ -1,46 +1,46 @@
 <template>
-  <div>
-    <h1>적금</h1>
+  <div class="container">
+    <h1 class="my-4">적금</h1>
     <!-- 은행 선택 드롭다운 -->
-    <div>
+    <div class="form-group">
       <label for="bank">은행 선택:</label>
-      <select id="bank" v-model="selectedBank">
+      <select id="bank" v-model="selectedBank" class="form-control">
         <option value="">모든 은행</option>
         <option v-for="bank in banks" :key="bank" :value="bank">{{ bank }}</option>
       </select>
     </div>
     <!-- 예치 기간 선택 -->
-    <div>
+    <div class="form-group">
       <label for="term">예치 기간 선택:</label>
-      <select id="term" v-model="selectedTerm">
+      <select id="term" v-model="selectedTerm" class="form-control">
         <option value="">모든 기간</option>
         <option v-for="term in availableTerms" :key="term" :value="term">{{ term }}개월</option>
       </select>
     </div>
     <!-- 확인 버튼 -->
-    <div>
-      <button @click="applyFilters">확인</button>
+    <div class="mb-4">
+      <button @click="applyFilters" class="btn btn-primary">확인</button>
     </div>
     <!-- 금리 정렬 버튼들 -->
-    <div>
-      <button @click="sortSavings(6)">6개월 금리순</button>
-      <button @click="sortSavings(12)">12개월 금리순</button>
-      <button @click="sortSavings(24)">24개월 금리순</button>
-      <button @click="sortSavings(36)">36개월 금리순</button>
+    <div class="btn-group mb-4" role="group" aria-label="Sort buttons">
+      <button @click="sortSavings(6)" class="btn btn-outline-secondary">6개월 금리순</button>
+      <button @click="sortSavings(12)" class="btn btn-outline-secondary">12개월 금리순</button>
+      <button @click="sortSavings(24)" class="btn btn-outline-secondary">24개월 금리순</button>
+      <button @click="sortSavings(36)" class="btn btn-outline-secondary">36개월 금리순</button>
     </div>
     <!-- 금융 상품 목록 -->
-    <ul>
-      <li v-for="saving in sortedSavings" :key="saving.id">
-        <p> 공시 제출일 : {{ saving.dcls_month }} </p>
-        <p> 금융 회사명 : {{ saving.kor_co_nm }} </p>
-        <p> 상품명 : {{ saving.fin_prdt_nm }} </p>
+    <ul class="list-group">
+      <li v-for="saving in sortedSavings" :key="saving.id" class="list-group-item">
+        <p><strong>공시 제출일:</strong> {{ saving.dcls_month }}</p>
+        <p><strong>금융 회사명:</strong> {{ saving.kor_co_nm }}</p>
+        <p><strong>상품명:</strong> {{ saving.fin_prdt_nm }}</p>
         <template v-for="option in saving.savingoption_set" :key="option.id">
           <div>
-            <p> {{ option.save_trm }}개월 금리 : {{ option.intr_rate }}% (최고 우대 금리: {{ option.intr_rate2 }}%) </p>
+            <p><strong>{{ option.save_trm }}개월 금리:</strong> {{ option.intr_rate }}% (최고 우대 금리: {{ option.intr_rate2 }}%)</p>
           </div>
         </template>
         <!-- 상세정보 보기 버튼 추가 -->
-        <button @click="selectSaving(saving)">상세정보 보기</button>
+        <button @click="selectSaving(saving)" class="btn btn-info mt-2">상세정보 보기</button>
       </li>
     </ul>
     <!-- 선택된 금융 상품의 상세 정보 모달 -->
@@ -200,5 +200,5 @@ const sortedSavings = computed(function() {
 </script>
 
 <style scoped>
-/* 스타일을 여기에 추가하세요 */
+/* 추가적인 스타일링을 여기에 추가하세요 */
 </style>
